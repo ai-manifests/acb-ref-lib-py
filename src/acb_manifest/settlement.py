@@ -77,32 +77,41 @@ def distribute_epistemic(
         return ()
 
     per_bonus = pool / 4.0
+    equal_share = per_bonus / len(participants)
 
     # Base share — equal across all participants
-    base_share = per_bonus / len(participants)
+    base_share = equal_share
 
-    # Falsification bonus — proportional to acknowledged falsifications
+    # Falsification bonus — proportional to acknowledged falsifications.
+    # If nobody acknowledged any falsification, the pool distributes equally
+    # so its share is not lost.
     total_falsifications = sum(c.acknowledged_falsifications for c in participants)
 
     def falsification_for(c: ParticipantContribution) -> float:
         if total_falsifications == 0:
-            return 0.0
+            return equal_share
         return per_bonus * c.acknowledged_falsifications / total_falsifications
 
-    # Load-bearing bonus — equal across load-bearing agents
+    # Load-bearing bonus — equal across load-bearing agents. If nobody is
+    # load-bearing, the pool distributes equally across all participants.
     load_bearing_count = sum(1 for c in participants if c.load_bearing)
 
     def load_bearing_for(c: ParticipantContribution) -> float:
-        if load_bearing_count == 0 or not c.load_bearing:
+        if load_bearing_count == 0:
+            return equal_share
+        if not c.load_bearing:
             return 0.0
         return per_bonus / load_bearing_count
 
-    # Outcome correctness — inverse Brier delta, normalized
+    # Outcome correctness — inverse Brier delta, normalized. If no
+    # outcomes are reported, the pool distributes equally.
     with_outcomes = [c for c in participants if c.outcome_brier_delta is not None]
     total_inverse = sum(1.0 - (c.outcome_brier_delta or 0.0) for c in with_outcomes)
 
     def outcome_for(c: ParticipantContribution) -> float:
-        if c.outcome_brier_delta is None or total_inverse == 0:
+        if not with_outcomes or total_inverse == 0:
+            return equal_share
+        if c.outcome_brier_delta is None:
             return 0.0
         return per_bonus * (1.0 - c.outcome_brier_delta) / total_inverse
 

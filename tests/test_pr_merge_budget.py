@@ -250,6 +250,44 @@ def test_store_tracks_lifecycle_states():
     assert store.get_settlement_for_deliberation(DLB) is not None
 
 
+def test_empty_bonus_pools_distribute_equally():
+    """Three participants, no falsifications, no load-bearing, no outcome.
+    Three of the four bonus categories have no eligible recipients and would
+    silently lose 75% of the draw without the empty-pool rule (spec §6.2)."""
+    budget = make_budget()
+    draw_total = 150.0
+    contributions = [
+        ParticipantContribution(TEST_RUNNER, True, 0, False, None, False),
+        ParticipantContribution(SCANNER, True, 0, False, None, False),
+        ParticipantContribution(LINTER, True, 0, False, None, False),
+    ]
+
+    record = build_settlement_record(SettlementInputs(
+        entry_id="adj_test_empty_pool",
+        deliberation_id=DLB,
+        timestamp=datetime(2026, 4, 14, 9, 30, 0),
+        prior_entry_hash=None,
+        budget_id=BGT,
+        amount_total=budget.amount_total,
+        draw_total=draw_total,
+        settlement=budget.settlement,
+        contributions=contributions,
+        substrate_reports=[],
+        habit_discount_applied=0,
+        unlock_triggered=False,
+        disagreement_magnitude_initial=0.05,
+        outcome_referenced=None,
+        signature="ed25519:test",
+    ))
+
+    sub_sum = sum(d.amount for d in record.substrate_distributions)
+    epi_sum = sum(d.amount for d in record.epistemic_distributions)
+    assert abs(sub_sum + epi_sum - draw_total) < 0.5
+
+    amounts = [d.amount for d in record.epistemic_distributions]
+    assert max(amounts) - min(amounts) < 0.5
+
+
 def test_cancellation_locks_budget():
     store = InMemoryBudgetStore()
     store.append(BudgetCancelled(
