@@ -1,5 +1,11 @@
 # acb-manifest
 
+[![PyPI](https://img.shields.io/pypi/v/acb-manifest.svg?label=PyPI)](https://pypi.org/project/acb-manifest/)
+[![Downloads](https://img.shields.io/pypi/dm/acb-manifest.svg)](https://pypi.org/project/acb-manifest/)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://pypi.org/project/acb-manifest/)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Spec](https://img.shields.io/badge/spec-acb--manifest.dev-informational)](https://acb-manifest.dev)
+
 A Python reference implementation of the **Agent Cognitive Budget (ACB)** protocol — the metabolic-budget layer for deliberative multi-agent systems. ACB provides append-only journal entries, pricing models, habit-memory discounts, and settlement distribution that mirror the brain's resource allocation for routine vs. contested decisions.
 
 This library is one of several reference implementations ([C#](https://github.com/ai-manifests/acb-ref-lib-csharp), [TypeScript](https://github.com/ai-manifests/acb-ref-lib-ts)) of the same spec. The spec itself is at [adp-manifest.dev](https://adp-manifest.dev) and is the source of truth; this library implements what the spec says.
