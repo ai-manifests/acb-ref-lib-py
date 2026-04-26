@@ -2,7 +2,7 @@
 
 A Python reference implementation of the **Agent Cognitive Budget (ACB)** protocol — the metabolic-budget layer for deliberative multi-agent systems. ACB provides append-only journal entries, pricing models, habit-memory discounts, and settlement distribution that mirror the brain's resource allocation for routine vs. contested decisions.
 
-This library is one of several reference implementations ([C#](https://git.marketally.com/ai-manifests/acb-ref-lib-csharp), [TypeScript](https://git.marketally.com/ai-manifests/acb-ref-lib-ts)) of the same spec. The spec itself is at [adp-manifest.dev](https://adp-manifest.dev) and is the source of truth; this library implements what the spec says.
+This library is one of several reference implementations ([C#](https://github.com/ai-manifests/acb-ref-lib-csharp), [TypeScript](https://github.com/ai-manifests/acb-ref-lib-ts)) of the same spec. The spec itself is at [adp-manifest.dev](https://adp-manifest.dev) and is the source of truth; this library implements what the spec says.
 
 Zero runtime dependencies. Requires Python 3.10+.
 
@@ -15,7 +15,7 @@ pip install acb-manifest
 Or from source:
 
 ```bash
-git clone https://git.marketally.com/ai-manifests/acb-ref-lib-py.git
+git clone https://github.com/ai-manifests/acb-ref-lib-py.git
 cd acb-ref-lib-py
 pip install -e .
 ```
